@@ -8,11 +8,18 @@ export default function AuthorizedPage() {
     const state = params.get("state");
 
     const savedState = sessionStorage.getItem("pkce_state");
+
+    if (!savedState) {
+      console.warn("No PKCE state found in sessionStorage. Maybe opened in a new tab?");
+      return;
+    }
+
     if (state !== savedState) {
       console.error("Invalid state");
       return;
     }
-
+    console.log("State is valid, continue exchanging code for tokens...");
+    
     const codeVerifier = sessionStorage.getItem("pkce_verifier");
     if (!code || !codeVerifier) {
       console.error("Missing code or verifier");
